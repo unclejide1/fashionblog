@@ -1,4 +1,4 @@
-package com.example.fashionblog.model.exception;
+package com.example.fashionblog.exception;
 
 
 import org.springframework.http.HttpStatus;
