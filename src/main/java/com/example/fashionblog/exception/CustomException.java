@@ -3,7 +3,7 @@ package com.example.fashionblog.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class CustomExceptionClass extends RuntimeException {
+public class CustomException extends RuntimeException {
 
     private static  final long serialVersionUID = 1L;
 
@@ -11,7 +11,7 @@ public class CustomExceptionClass extends RuntimeException {
 
     private HttpStatus status;
 
-    public CustomExceptionClass(String message, HttpStatus status){
+    public CustomException(String message, HttpStatus status){
         this.message = message;
         this.status = status;
     }
