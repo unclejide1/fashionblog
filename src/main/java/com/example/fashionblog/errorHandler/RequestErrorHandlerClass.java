@@ -1,8 +1,12 @@
 package com.example.fashionblog.errorHandler;
 
 import com.example.fashionblog.response.ApiResponseClass;
+import com.example.fashionblog.exception.CustomException;
 import com.example.fashionblog.response.ApiValidationErrorClass;
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.beans.TypeMismatchException;
+import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -11,7 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
-import org.springframework.web.HttpMediaTypeNotSupportedException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +28,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityNotFoundException;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
@@ -101,6 +108,7 @@ public class RequestErrorHandlerClass extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+
     /**
      * Handle HttpMessageNotReadableException. Happens when request JSON is malformed.
      *
@@ -113,8 +121,10 @@ public class RequestErrorHandlerClass extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         ServletWebRequest servletWebRequest = (ServletWebRequest) request;
-        String error = "Malformed JSON request";
-        return buildResponseEntity(new ApiResponseClass<>(HttpStatus.BAD_REQUEST, error, ex));
+        ApiResponseClass<Object> apiError = new ApiResponseClass<>(HttpStatus.BAD_REQUEST, ex.getCause());
+        apiError.setDebugMessage(ex.getMostSpecificCause().getMessage());
+        apiError.setError("Malformed JSON request");
+        return buildResponseEntity(apiError);
     }
 
     /**
@@ -125,7 +135,7 @@ public class RequestErrorHandlerClass extends ResponseEntityExceptionHandler {
      * @param status  HttpStatus
      * @param request WebRequest
      * @return the ApiError object
-     */
+//     */
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotWritable(HttpMessageNotWritableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         String error = "Error writing JSON output";
@@ -163,12 +173,13 @@ public class RequestErrorHandlerClass extends ResponseEntityExceptionHandler {
                                                                   WebRequest request) {
         if (ex.getCause() instanceof ConstraintViolationException) {
             ApiResponseClass<Object> error = new ApiResponseClass<>(HttpStatus.CONFLICT, ex.getCause());
-            error.setDebugMessage("Check your parameters for a repeated field");
-            error.setError("Category already exists");
+            error.setDebugMessage(ex.getMostSpecificCause().getLocalizedMessage());
+            error.setError(ex.getCause().getMessage());
             return buildResponseEntity(error);
         }
         return buildResponseEntity(new ApiResponseClass<>(HttpStatus.INTERNAL_SERVER_ERROR, ex));
     }
+
 
     /**
      * Handle Exception, handle generic Exception.class
@@ -180,11 +191,17 @@ public class RequestErrorHandlerClass extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
                                                                       WebRequest request) {
         ApiResponseClass<Object> apiError = new ApiResponseClass<>(BAD_REQUEST);
-        apiError.setMessage(String.format("The parameter '%s' of value '%s' could not be converted to type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
-        apiError.setDebugMessage(ex.getMessage());
+        apiError.setError(String.format("The parameter '%s' of value '%s' could not be converted to type '%s'", ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName()));
+        apiError.setDebugMessage("Mismatch in parameter type of endpoint, send type of " +  ex.getRequiredType().getSimpleName());
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Object> handleCustomException(CustomException ce) {
+        ApiResponseClass<Object> ar = new ApiResponseClass<>(ce.getStatus());
+        ar.setError(ce.getMessage());
+        return buildResponseEntity(ar);
+    }
 
     private ResponseEntity<Object> buildResponseEntity(ApiResponseClass<Object> apiError) {
         return new ResponseEntity<>(apiError, apiError.getStatus());
