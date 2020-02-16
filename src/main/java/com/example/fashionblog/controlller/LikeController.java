@@ -35,7 +35,7 @@ public class LikeController {
                                                                    @Valid @RequestBody Like like){
         Like createdLike = likeService.AddLike(postId, like);
         ApiResponseClass<Like> responseForCreatedPost = new ApiResponseClass<>(HttpStatus.CREATED);
-        responseForCreatedPost.setMessage("Comment Made Successfully");
+        responseForCreatedPost.setMessage("like Made Successfully");
         responseForCreatedPost.setData(createdLike);
         responseForCreatedPost.setError(noErrorMessage);
         responseForCreatedPost.setDebugMessage(noDebugMessage);
@@ -43,7 +43,7 @@ public class LikeController {
     }
 
     @RequestMapping(path = "/{postId}/like", method = RequestMethod.GET)
-    public ResponseEntity<ApiResponseClass<List<Like>>> getCommentsForAPost (@PathVariable(value = "postId") Long postId){
+    public ResponseEntity<ApiResponseClass<List<Like>>> geLikesForAPost (@PathVariable(value = "postId") Long postId){
         List<Like> commentsGottenForAPost = likeService.getLikesByPosts(postId);
         ApiResponseClass<List<Like>> responseForCommentsFoundForAPost = new ApiResponseClass<>(HttpStatus.OK);
         responseForCommentsFoundForAPost.setMessage(commentsGottenForAPost.size() + " Likes Retrieved for post with id: " + postId );

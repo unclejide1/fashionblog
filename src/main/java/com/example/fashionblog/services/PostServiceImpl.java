@@ -5,6 +5,10 @@ import com.example.fashionblog.exception.CustomException;
 import com.example.fashionblog.model.Post;
 import com.example.fashionblog.repository.PostingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +40,18 @@ public class PostServiceImpl implements PostingService {
     }
 
     @Override
-    public List<Post> getAllPosts() throws CustomException {
-        List<Post> allPosts = postingRepository.findAll();
-        if(allPosts.isEmpty()){
+    public List<Post> getAllPosts(Integer pageNo, Integer noOfContent) throws CustomException {
+        Pageable pagination = PageRequest.of(pageNo,noOfContent, Sort.by(Sort.Direction.ASC, "id"));
+
+        Slice<Post> allPosts = postingRepository.findAll(pagination);
+        System.out.println( "allposts " + allPosts);
+        if(!allPosts.hasContent()) {
             throw new CustomException("There are no Posts available", HttpStatus.BAD_REQUEST);
         }
-        return allPosts;
+        List<Post> retrievedPosts = allPosts.getContent();
+        System.out.println(retrievedPosts);
+        return retrievedPosts;
+
     }
 
     @Override

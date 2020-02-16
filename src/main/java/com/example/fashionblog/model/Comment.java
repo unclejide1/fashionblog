@@ -18,7 +18,6 @@ public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-
     private Long id;
 
     @Column(nullable = false)
@@ -49,13 +48,19 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 
-    public Comment() {
+//    public Comment() {
+//    }
+
+    public Comment(String email, String title, String comments) {
+        this.title = title;
+        this.email = email;
+        this.comments = comments;
     }
 
-//    @ManyToOne(fetch = FetchType.EAGER,
-//            optional = false)
-//    @JoinColumn(name = "post_id", nullable = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
+        public Comment() {
+    }
+
+
 
     public Long getId() {
         return id;

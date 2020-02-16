@@ -50,8 +50,8 @@ public class PostsController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponseClass<List<Post>>> getAllPosts(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "20") int limit){
-        List<Post> allPosts = postService.getAllPosts();
+    public ResponseEntity<ApiResponseClass<List<Post>>> getAllPosts(@RequestParam(value = "page", defaultValue = "0") Integer pageNo, @RequestParam(value = "limit", defaultValue = "10") Integer noOfContent){
+        List<Post> allPosts = postService.getAllPosts(pageNo,noOfContent);
         return getApiResponseClassResponseEntity(allPosts);
     }
 
@@ -83,7 +83,7 @@ public class PostsController {
     }
 
     @RequestMapping(path = "{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<ApiResponseClass<Post>> deleteTask(@PathVariable(name = "id") Long id){
+    public ResponseEntity<ApiResponseClass<Post>> deletePost(@PathVariable(name = "id") Long id){
         Long deletedId = postService.deletePost(id);
         ApiResponseClass<Post> deletedResponse = new ApiResponseClass<>(HttpStatus.OK);
         deletedResponse.setMessage("post with id: " + id + " has been deleted");

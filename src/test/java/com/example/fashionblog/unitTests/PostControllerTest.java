@@ -79,12 +79,14 @@ public class PostControllerTest {
     @Test
     public  void getAllPostsRequestTest(){
         postService.createPost(testPost1);
+//        postController.createPost(testPost1);
+//        postController.createPost(testPost2);
         postService.createPost(testPost2);
-        Mockito.when(postService.getAllPosts(0,2)).thenReturn(Arrays.asList(testPost1,testPost2));
+        Mockito.when(postService.getAllPosts(0,2)).thenReturn(Arrays.asList(testPost2,testPost1));
         ResponseEntity<ApiResponseClass<List<Post>>> retrievedPosts = postController.getAllPosts(0,2);
         assertThat(retrievedPosts.getStatusCode(), is(HttpStatus.OK));
         assertThat(retrievedPosts.getBody(), is(notNullValue()));
-        assertThat(retrievedPosts.getBody().getData().size(), is(2));
+        assertThat(retrievedPosts.getBody().getData().size(), is(2 ));
     }
 
 

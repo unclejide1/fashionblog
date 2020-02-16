@@ -17,7 +17,10 @@ public class Like {
     private Long id;
 
 
-    private int likesCount = 0;
+
+    @Column(nullable = false)
+    @Email
+    private  String email;
 
 
     @ManyToOne(fetch = FetchType.EAGER,
@@ -29,6 +32,10 @@ public class Like {
     public Like() {
     }
 
+    public Like(String email){
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }
@@ -37,13 +44,13 @@ public class Like {
         this.id = id;
     }
 
-    public int getLikesCount() {
-        return likesCount;
-    }
-
-    public void setLikesCount(int likesCount) {
-        this.likesCount = likesCount;
-    }
+//    public int getLikesCount() {
+//        return likesCount;
+//    }
+//
+//    public void setLikesCount(int likesCount) {
+//        this.likesCount = likesCount;
+//    }
 
     public Post getPost() {
         return post;
@@ -51,5 +58,14 @@ public class Like {
 
     public void setPost(Post post) {
         this.post = post;
+
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

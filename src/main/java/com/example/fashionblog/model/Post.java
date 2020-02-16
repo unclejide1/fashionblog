@@ -16,8 +16,6 @@ import java.sql.Timestamp;
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Post {
 
-//    private static final long serialVersionUID = -1798070786993154676L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,7 +24,6 @@ public class Post {
     @NotBlank
 
     @Size(min = 4, max = 255, message = "Minimum category should be of length: 4 characters")
-//    @JsonDeserialize(using = CustomDeserializer.class)
     private String category;
 
     @NotNull
@@ -43,20 +40,16 @@ public class Post {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp updatedAt;
 
-//    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    private  List<Comments> comments;
-//
-//    @OneToMany(mappedBy = "post", fetch = FetchType.EAGER)
-//    @LazyCollection(LazyCollectionOption.FALSE)
-//    private  List<Likes> likes;
+
 
     public Post() {
     }
 
-//    public static long getSerialVersionUID() {
-//        return serialVersionUID;
-//    }
+    public Post(String  category, String description) {
+        this.category = category;
+        this.description=description;
+    }
+
 
     public Long getId() {
         return id;
@@ -99,19 +92,4 @@ public class Post {
         this.updatedAt = updatedAt;
     }
 
-//    public List<Comments> getComments() {
-//        return comments;
-//    }
-//
-//    public void setComments(List<Comments> comments) {
-//        this.comments = comments;
-//    }
-//
-//    public List<Likes> getLikes() {
-//        return likes;
-//    }
-//
-//    public void setLikes(List<Likes> likes) {
-//        this.likes = likes;
-//    }
 }
