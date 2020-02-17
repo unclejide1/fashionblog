@@ -34,20 +34,20 @@ public class LikeController {
     public ResponseEntity<ApiResponseClass<Like>> addLike(@PathVariable(value = "postId") Long postId,
                                                                    @Valid @RequestBody Like like){
         Like createdLike = likeService.AddLike(postId, like);
-        ApiResponseClass<Like> responseForCreatedPost = new ApiResponseClass<>(HttpStatus.CREATED);
-        responseForCreatedPost.setMessage("like Made Successfully");
-        responseForCreatedPost.setData(createdLike);
-        responseForCreatedPost.setError(noErrorMessage);
-        responseForCreatedPost.setDebugMessage(noDebugMessage);
-        return  new ResponseEntity<>(responseForCreatedPost, HttpStatus.CREATED);
+        ApiResponseClass<Like> responseForLikedPost = new ApiResponseClass<>(HttpStatus.CREATED);
+        responseForLikedPost.setMessage("like Made Successfully");
+        responseForLikedPost.setData(createdLike);
+        responseForLikedPost.setError(noErrorMessage);
+        responseForLikedPost.setDebugMessage(noDebugMessage);
+        return  new ResponseEntity<>(responseForLikedPost, responseForLikedPost.getStatus());
     }
 
     @RequestMapping(path = "/{postId}/like", method = RequestMethod.GET)
     public ResponseEntity<ApiResponseClass<List<Like>>> geLikesForAPost (@PathVariable(value = "postId") Long postId){
-        List<Like> commentsGottenForAPost = likeService.getLikesByPosts(postId);
-        ApiResponseClass<List<Like>> responseForCommentsFoundForAPost = new ApiResponseClass<>(HttpStatus.OK);
-        responseForCommentsFoundForAPost.setMessage(commentsGottenForAPost.size() + " Likes Retrieved for post with id: " + postId );
-        responseForCommentsFoundForAPost.setData(commentsGottenForAPost);
-        return new ResponseEntity<>(responseForCommentsFoundForAPost, HttpStatus.OK);
+        List<Like> likesGottenForAPost = likeService.getLikesByPosts(postId);
+        ApiResponseClass<List<Like>> responseForLikesFoundForAPost = new ApiResponseClass<>(HttpStatus.OK);
+        responseForLikesFoundForAPost.setMessage(likesGottenForAPost.size() + " Likes Retrieved for post with id: " + postId );
+        responseForLikesFoundForAPost.setData(likesGottenForAPost);
+        return new ResponseEntity<>(responseForLikesFoundForAPost, HttpStatus.OK);
     }
 }

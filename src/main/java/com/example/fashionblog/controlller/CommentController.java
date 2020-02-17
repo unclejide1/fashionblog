@@ -1,10 +1,8 @@
 package com.example.fashionblog.controlller;
 
 import com.example.fashionblog.model.Comment;
-import com.example.fashionblog.model.Post;
 import com.example.fashionblog.response.ApiResponseClass;
 import com.example.fashionblog.services.CommentService;
-import com.example.fashionblog.services.PostServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +36,7 @@ public class CommentController {
         responseForCreatedPost.setData(createdComment);
         responseForCreatedPost.setError(noErrorMessage);
         responseForCreatedPost.setDebugMessage(noDebugMessage);
-        return  new ResponseEntity<>(responseForCreatedPost, HttpStatus.CREATED);
+        return  new ResponseEntity<>(responseForCreatedPost, responseForCreatedPost.getStatus());
     }
 
     @RequestMapping(path = "/{postId}/comment/{commentId}", method = RequestMethod.PUT)
@@ -50,7 +48,7 @@ public class CommentController {
         responseForUpdatedPost.setData(updatedComment);
         responseForUpdatedPost.setError(noErrorMessage);
         responseForUpdatedPost.setDebugMessage(noDebugMessage);
-        return new ResponseEntity<>(responseForUpdatedPost, HttpStatus.OK);
+        return new ResponseEntity<>(responseForUpdatedPost, responseForUpdatedPost.getStatus());
     }
 
     @RequestMapping(path = "/{postId}/comment/{commentId}", method = RequestMethod.DELETE)
@@ -60,7 +58,7 @@ public class CommentController {
         responseForDeletedPost.setMessage("Comment with id " + deletedCommentId + " has been deleted Successfully");
         responseForDeletedPost.setError(noErrorMessage);
         responseForDeletedPost.setDebugMessage(noDebugMessage);
-        return  new ResponseEntity<>(responseForDeletedPost, HttpStatus.OK);
+        return  new ResponseEntity<>(responseForDeletedPost, responseForDeletedPost.getStatus());
     }
 
     @RequestMapping(path = "/{postId}/comment", method = RequestMethod.GET)
@@ -69,7 +67,7 @@ public class CommentController {
         ApiResponseClass<List<Comment>> responseForCommentsFoundForAPost = new ApiResponseClass<>(HttpStatus.OK);
         responseForCommentsFoundForAPost.setMessage("Comments Retrieved for post with id: " + postId );
         responseForCommentsFoundForAPost.setData(commentsGottenForAPost);
-        return new ResponseEntity<>(responseForCommentsFoundForAPost, HttpStatus.OK);
+        return new ResponseEntity<>(responseForCommentsFoundForAPost, responseForCommentsFoundForAPost.getStatus());
     }
 
 }

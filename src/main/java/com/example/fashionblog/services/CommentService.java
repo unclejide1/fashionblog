@@ -27,7 +27,7 @@ public class CommentService implements CommentingService {
     }
 
     @Override
-    public Comment createComment(Long postId, Comment comment) {
+    public Comment createComment(Long postId, Comment comment) throws CustomException {
         Post postToBeCommentedOn = postingRepository.findById(postId).orElse(null);
         if(postToBeCommentedOn == null){
             throw new CustomException("Post not found for parameters {id=" + postId + "} to be commented on", HttpStatus.BAD_REQUEST);
@@ -37,7 +37,7 @@ public class CommentService implements CommentingService {
     }
 
     @Override
-    public Comment updateComment(Long postId, Long commentId, Comment commentToUpdate) {
+    public Comment updateComment(Long postId, Long commentId, Comment commentToUpdate) throws CustomException {
         Post postToUpdateComment = postingRepository.findById(postId).orElse(null);
         if(postToUpdateComment == null){
             throw new CustomException("Post not found for parameters {postId=" + postId + "} with any comment to be updated", HttpStatus.BAD_REQUEST);
@@ -52,7 +52,7 @@ public class CommentService implements CommentingService {
     }
 
     @Override
-    public Long deleteComment(Long postId, Long commentId) {
+    public Long deleteComment(Long postId, Long commentId) throws CustomException {
         Comment checkIfCommentExist = commentingRepository.findByIdAndPostId(commentId, postId).orElse(null);
 
         if(checkIfCommentExist == null){
@@ -63,10 +63,10 @@ public class CommentService implements CommentingService {
     }
 
     @Override
-    public List<Comment> getCommentsByPosts(Long postId) {
+    public List<Comment> getCommentsByPosts(Long postId) throws CustomException {
         List<Comment> commentsForAPost = commentingRepository.findByPostId(postId);
         if(commentsForAPost.isEmpty()){
-            throw new CustomException("No comments for posts with id: " + postId, HttpStatus.BAD_REQUEST);
+            throw new CustomException("No comments for posts with id: " + postId, HttpStatus.OK);
         }
         return commentsForAPost;
     }
