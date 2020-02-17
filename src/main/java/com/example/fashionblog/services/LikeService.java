@@ -29,7 +29,7 @@ public class LikeService implements LikingService {
 
 
     @Override
-    public Like AddLike(Long postId, Like like) {
+    public Like AddLike(Long postId, Like like) throws CustomException {
         Post postToBeLiked = postingRepository.findById(postId).orElse(null);
         if(postToBeLiked == null){
             throw new CustomException("Post not found for parameters {id=" + postId + "} to be liked", HttpStatus.BAD_REQUEST);
@@ -40,7 +40,7 @@ public class LikeService implements LikingService {
 
 
     @Override
-    public List<Like> getLikesByPosts(Long postId) {
+    public List<Like> getLikesByPosts(Long postId) throws CustomException {
         List<Like> commentsForAPost = likingRepository.findByPostId(postId);
         if(commentsForAPost.isEmpty()){
             throw new CustomException("No comments for posts with id: " + postId, HttpStatus.BAD_REQUEST);

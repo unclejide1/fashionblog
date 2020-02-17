@@ -1,6 +1,7 @@
 package com.example.fashionblog.repository;
 
 import com.example.fashionblog.model.Comment;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

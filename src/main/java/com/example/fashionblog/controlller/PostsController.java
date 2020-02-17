@@ -58,7 +58,7 @@ public class PostsController {
 
     @RequestMapping(path = "/search", method = RequestMethod.GET)
     public ResponseEntity<ApiResponseClass<List<Post>>> getPostByCategory(@RequestParam String category){
-        List<Post> foundPostByCategory = postService.findByCategory(category);
+        List<Post> foundPostByCategory = postService.findByCategory(category.toLowerCase());
         return getApiResponseClassResponseEntity(foundPostByCategory);
     }
 

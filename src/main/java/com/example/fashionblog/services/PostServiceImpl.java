@@ -31,7 +31,7 @@ public class PostServiceImpl implements PostingService {
     }
 
     @Override
-    public Post getAPost(Long id) {
+    public Post getAPost(Long id) throws CustomException {
         Post foundPost = postingRepository.findById(id).orElse(null);
         if(foundPost == null){
             throw new CustomException("Post not found for parameters {id=" + id + "}", HttpStatus.BAD_REQUEST);
@@ -44,7 +44,6 @@ public class PostServiceImpl implements PostingService {
         Pageable pagination = PageRequest.of(pageNo,noOfContent, Sort.by(Sort.Direction.ASC, "id"));
 
         Slice<Post> allPosts = postingRepository.findAll(pagination);
-        System.out.println( "allposts " + allPosts);
         if(!allPosts.hasContent()) {
             throw new CustomException("There are no Posts available", HttpStatus.BAD_REQUEST);
         }
@@ -55,9 +54,9 @@ public class PostServiceImpl implements PostingService {
     }
 
     @Override
-    public List<Post> findByCategory(String category) {
-
-        List<Post> postFoundByCategory = postingRepository.findByCategory(category);
+    public List<Post> findByCategory(String category) throws CustomException {
+        List<Post> postFoundByCategory = postingRepository.findByCategory(category.toLowerCase());
+        System.out.println(postFoundByCategory);
         if(postFoundByCategory.isEmpty()){
             throw new CustomException("There are no available posts of category: " + category, HttpStatus.BAD_REQUEST);
         }
@@ -65,7 +64,7 @@ public class PostServiceImpl implements PostingService {
     }
 
     @Override
-    public Post updatePost(Post postToUpdate, Long id){
+    public Post updatePost(Post postToUpdate, Long id) throws  CustomException{
         Post oldPost = postingRepository.findById(id).orElse(null);
         if(oldPost == null){
             throw new CustomException("Post not found for parameters {id=" + id + "} " + " to be updated", HttpStatus.BAD_REQUEST);
@@ -76,7 +75,7 @@ public class PostServiceImpl implements PostingService {
     }
 
     @Override
-    public Long deletePost(Long id){
+    public Long deletePost(Long id) throws CustomException{
         if(!postingRepository.existsById(id)){
             throw new CustomException("Post not found for parameters {id=" + id + "} " + " to be deleted", HttpStatus.BAD_REQUEST);
         }

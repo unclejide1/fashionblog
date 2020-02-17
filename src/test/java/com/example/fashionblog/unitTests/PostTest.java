@@ -86,5 +86,5 @@ public class PostTest {
         Mockito.verify(postRepository, Mockito.times(1)).existsById(testPost1.getId());
 
     }
-    
+
 }
