@@ -86,12 +86,5 @@ public class PostTest {
         Mockito.verify(postRepository, Mockito.times(1)).existsById(testPost1.getId());
 
     }
-
-//    @Test
-//    public void  deleteAPostWithWrongId(){
-//        Mockito.when(postRepository.existsById(testPost1.getId())).thenReturn(true);
-//        assertThat(postService.deletePost(testPost1.getId()), is(testPost2.getId()));
-//        Mockito.verify(postRepository, Mockito.times(1)).existsById(testPost1.getId());
-//
-//    }
+    
 }
