@@ -1,53 +1,55 @@
 package com.example.fashionblog.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Entity
 @Table(name = "posts")
-public class Posts implements Serializable {
-
-    private static final long serialVersionUID = -1798070786993154676L;
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+public class Post {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    @Size(min = 4, max = 255, message = "Minimum username length: 4 characters")
+    @Column(nullable = false)
+    @NotBlank
+
+    @Size(min = 4, max = 255, message = "Minimum category should be of length: 4 characters")
     private String category;
 
+    @NotNull
+    @NotBlank
     private  String description;
 
 
     @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp createAt;
 
 
     @UpdateTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp updatedAt;
 
 
-    @OneToMany(mappedBy = "post")
-    private List<Comments> comments;
 
-
-    @OneToMany(mappedBy = "post")
-    private List<Likes> likes;
-
-
-    public Posts() {
+    public Post() {
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+    public Post(String  category, String description) {
+        this.category = category;
+        this.description=description;
     }
+
 
     public Long getId() {
         return id;
@@ -73,6 +75,7 @@ public class Posts implements Serializable {
         this.description = description;
     }
 
+
     public Timestamp getCreateAt() {
         return createAt;
     }
@@ -89,19 +92,4 @@ public class Posts implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public List<Comments> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comments> comments) {
-        this.comments = comments;
-    }
-
-    public List<Likes> getLikes() {
-        return likes;
-    }
-
-    public void setLikes(List<Likes> likes) {
-        this.likes = likes;
-    }
 }

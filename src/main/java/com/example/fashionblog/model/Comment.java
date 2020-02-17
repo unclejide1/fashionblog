@@ -1,27 +1,26 @@
 package com.example.fashionblog.model;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comments")
-public class Comments implements Serializable {
-
-    private static final long serialVersionUID = -1798070786993154676L;
+public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(nullable = false)
     @Email
     private  String email;
 
@@ -30,26 +29,38 @@ public class Comments implements Serializable {
     private String title;
 
     @Column(nullable = false)
+
     private String comments;
 
     @Column(nullable = false)
     @CreationTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp createAt;
 
     @Column(nullable = false)
     @UpdateTimestamp
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Timestamp updatedAt;
 
-    @ManyToOne
-    @JoinColumn(name = "POST_ID")
-    private Posts post;
+    @ManyToOne(fetch = FetchType.EAGER,
+            optional = false)
+    @JoinColumn(name = "post_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Post post;
 
-    public Comments() {
+//    public Comment() {
+//    }
+
+    public Comment(String email, String title, String comments) {
+        this.title = title;
+        this.email = email;
+        this.comments = comments;
     }
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
+        public Comment() {
     }
+
+
 
     public Long getId() {
         return id;
@@ -99,11 +110,11 @@ public class Comments implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Posts getPost() {
+    public Post getPost() {
         return post;
     }
 
-    public void setPost(Posts post) {
+    public void setPost(Post post) {
         this.post = post;
     }
 }
