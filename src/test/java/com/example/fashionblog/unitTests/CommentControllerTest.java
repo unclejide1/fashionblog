@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class CommentControllerTest {
 
     private static Post testPost1;

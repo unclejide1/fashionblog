@@ -28,8 +28,6 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
-//@RunWith(MockitoJUnitRunner.class)
 public class PostTest {
 
     private static Post testPost1;
