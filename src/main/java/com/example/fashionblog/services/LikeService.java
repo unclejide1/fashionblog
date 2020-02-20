@@ -43,7 +43,7 @@ public class LikeService implements LikingService {
     public List<Like> getLikesByPosts(Long postId) throws CustomException {
         List<Like> commentsForAPost = likingRepository.findByPostId(postId);
         if(commentsForAPost.isEmpty()){
-            throw new CustomException("No comments for posts with id: " + postId, HttpStatus.BAD_REQUEST);
+            throw new CustomException("No likes for posts with id: " + postId, HttpStatus.BAD_REQUEST);
         }
         return commentsForAPost;
     }

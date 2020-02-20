@@ -33,7 +33,6 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class LikeControllerTest {
     private static Post testPost1;
     private static Post testPost2;

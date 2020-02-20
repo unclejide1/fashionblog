@@ -28,7 +28,6 @@ import static org.hamcrest.Matchers.is;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class LikeServiceTest {
     private static Post testPost1;
     private static Post testPost2;
