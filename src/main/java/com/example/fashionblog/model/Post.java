@@ -22,7 +22,6 @@ public class Post {
 
     @Column(nullable = false)
     @NotBlank
-
     @Size(min = 4, max = 255, message = "Minimum category should be of length: 4 characters")
     private String category;
 

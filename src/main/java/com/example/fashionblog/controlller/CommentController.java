@@ -4,6 +4,7 @@ import com.example.fashionblog.model.Comment;
 import com.example.fashionblog.response.ApiResponseClass;
 import com.example.fashionblog.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,9 @@ import java.util.List;
 public class CommentController {
 
     private CommentService commentService;
+
+    @Value("${server.port}")
+    int port;
 
     @Autowired
     public CommentController(CommentService commentService) {
@@ -68,6 +72,11 @@ public class CommentController {
         responseForCommentsFoundForAPost.setMessage("Comments Retrieved for post with id: " + postId );
         responseForCommentsFoundForAPost.setData(commentsGottenForAPost);
         return new ResponseEntity<>(responseForCommentsFoundForAPost, responseForCommentsFoundForAPost.getStatus());
+    }
+
+    @RequestMapping(path ="/healthcheck", method = RequestMethod.GET)
+    public String healthCheck(){
+        return "i am running on " + port ;
     }
 
 }
