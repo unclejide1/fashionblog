@@ -21,6 +21,7 @@ public class Like {
     @Column(nullable = false)
     @Email
     private  String email;
+//private  String email = "njusticej@gmail.com";
 
 
     @ManyToOne(fetch = FetchType.EAGER,
